@@ -1,0 +1,62 @@
+import { useState } from 'react';
+
+export default function GroceryItemRow({ item, onToggle, onUpdate, onRemove }) {
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(item.name);
+
+  function saveName() {
+    const trimmed = nameDraft.trim();
+    if (trimmed) onUpdate({ name: trimmed });
+    else setNameDraft(item.name);
+    setEditingName(false);
+  }
+
+  return (
+    <div className={`grocery-item ${item.bought ? 'grocery-item--bought' : ''}`}>
+      <input
+        type="checkbox"
+        className="grocery-item__check"
+        checked={item.bought}
+        onChange={onToggle}
+        aria-label={`Mark ${item.name} as bought`}
+      />
+
+      {editingName ? (
+        <input
+          type="text"
+          className="grocery-item__name-input"
+          value={nameDraft}
+          autoFocus
+          onChange={(e) => setNameDraft(e.target.value)}
+          onBlur={saveName}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') saveName();
+            if (e.key === 'Escape') {
+              setNameDraft(item.name);
+              setEditingName(false);
+            }
+          }}
+        />
+      ) : (
+        <button type="button" className="grocery-item__name" onClick={() => setEditingName(true)} title="Click to edit">
+          {item.name}
+        </button>
+      )}
+
+      <label className="grocery-item__price">
+        ₦
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          value={item.price}
+          onChange={(e) => onUpdate({ price: Math.max(0, Number(e.target.value) || 0) })}
+        />
+      </label>
+
+      <button type="button" className="grocery-item__remove" onClick={onRemove} aria-label={`Remove ${item.name}`}>
+        ×
+      </button>
+    </div>
+  );
+}

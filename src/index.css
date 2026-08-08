@@ -1,0 +1,84 @@
+/* Design tokens — grounded in an actual kitchen-appliance register:
+   seasoned cast iron, a spice rack, an oven's LED clock. No cream/terracotta
+   default, no glassy neon dark-mode default: flat colors, solid states,
+   no gradients or blur-glow. */
+:root {
+  --ink-950: #1a1815;
+  --ink-900: #24211d;
+  --ink-800: #322e28;
+  --ink-700: #423c34;
+
+  --paper-100: #f3ede0;
+  --paper-300: #cabfa9;
+  --paper-500: #948a76;
+
+  --amber-400: #eab147;
+  --amber-500: #e3a333;
+  --amber-600: #b9821f;
+
+  --tomato-500: #d6503f;
+  --tomato-600: #b23f30;
+  --tomato-900: #3a1712;
+
+  --sage-500: #8ba17c;
+
+  --border: rgba(243, 237, 224, 0.1);
+  --border-strong: rgba(243, 237, 224, 0.18);
+
+  --font-sans: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink-950);
+  color: var(--paper-100);
+  font-family: var(--font-sans);
+  line-height: 1.4;
+  min-height: 100svh;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--paper-100);
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--amber-500);
+  color: var(--ink-950);
+}
