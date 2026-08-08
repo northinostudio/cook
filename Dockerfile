@@ -1,5 +1,6 @@
-# Multi-stage build: compile the Vite frontend, then run it from the same
-# Express process that serves the API — one image, one deployable service.
+# Alternative self-host path (Fly.io/Railway/etc) — not used by the Vercel
+# deployment, which builds and runs serverlessly instead. One image: builds
+# the Vite frontend, then runs it from the same Express process as the API.
 
 FROM node:20-slim AS build
 WORKDIR /app
@@ -12,8 +13,8 @@ FROM node:20-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY server/package*.json ./server/
-RUN npm --prefix server install --omit=dev
+COPY package*.json ./
+RUN npm install --omit=dev
 
 COPY --from=build /app/dist ./dist
 COPY server ./server
