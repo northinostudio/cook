@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import GoogleSignInButton from './GoogleSignInButton';
+
+const HAS_GOOGLE = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
 
 export default function AuthScreen() {
-  const { signin, signup } = useAuth();
+  const { signin, signup, signinWithGoogle } = useAuth();
   const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +26,18 @@ export default function AuthScreen() {
     }
   }
 
+  async function handleGoogleCredential(credential) {
+    setError('');
+    setBusy(true);
+    try {
+      await signinWithGoogle(credential);
+    } catch (err) {
+      setError(err.message || 'Google sign-in failed');
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="auth-screen">
       <div className="auth-card">
@@ -33,6 +48,15 @@ export default function AuthScreen() {
             <p className="app__subtitle">Sign in to sync your foods and lists across devices.</p>
           </div>
         </div>
+
+        {HAS_GOOGLE && (
+          <>
+            <GoogleSignInButton onCredential={handleGoogleCredential} />
+            <div className="auth-divider">
+              <span>or</span>
+            </div>
+          </>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <label>

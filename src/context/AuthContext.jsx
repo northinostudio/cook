@@ -50,6 +50,16 @@ export function AuthProvider({ children }) {
     setStatus('authed');
   }, []);
 
+  // `credential` is the Google ID token JWT handed back by Google Identity
+  // Services — the server verifies it and finds-or-creates the account.
+  const signinWithGoogle = useCallback(async (credential) => {
+    const { token: newToken, user: newUser } = await api.post('/auth/google', { credential });
+    localStorage.setItem(TOKEN_KEY, newToken);
+    setToken(newToken);
+    setUser(newUser);
+    setStatus('authed');
+  }, []);
+
   const signout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     setToken(null);
@@ -58,7 +68,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, status, signup, signin, signout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, status, signup, signin, signinWithGoogle, signout }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 

@@ -16,24 +16,6 @@ app.use(
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-// TEMPORARY diagnostic route — registered before the connectDB middleware
-// below so it always runs and reports the real connection error instead of
-// a generic 500. Remove once the production DB connection issue is resolved.
-app.get('/api/health/db-debug', async (req, res) => {
-  try {
-    const conn = await connectDB();
-    res.json({ ok: true, host: conn.connection?.host, name: conn.connection?.name });
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      name: err.name,
-      message: err.message,
-      code: err.code,
-      hasUri: Boolean(process.env.MONGO_URI),
-      uriPrefix: process.env.MONGO_URI ? process.env.MONGO_URI.slice(0, 20) : null,
-    });
-  }
-});
 
 // Every request from here down waits for a real, established DB connection
 // before hitting a route — connectDB() is cached, so on a warm instance
